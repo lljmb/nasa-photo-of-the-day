@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import styled from 'styled-components'
-import Header from './styles/Header.less'
-import Body from './styles/Body.less'
 
 function App() {
   const [photo, setPhoto] = useState([])
+  const [descript, setDescript] = useState([])
+  const [titl, setTitle] = useState([])
 
   useEffect(() => { 
     const fetchPhoto = () => {
@@ -14,36 +14,40 @@ function App() {
     .then( (res) => {
       setPhoto(res.data.url);
       console.log('hey hey hey');
+
+      setDescript(res.data.explanation);
+
+      setTitle(res.data.title)
     })
     .catch( err => {
-      debugger;
+      console.log(err, 'it probably timed out');
     })
   }
     fetchPhoto();
   }, [])  
 
   return (
-    <div className="App">
+    <StyledNASA className="App">
       <h1>NASA Photo of the Day</h1>
+      <h2>{titl}</h2>
       <p>
-        <img src={photo}></img>
-       <button><span role="img" aria-label='go!'>🚀!</span></button>
-      </p>
-    </div>
+        <img src={photo}></img></p>
+      <p>{descript}</p>
+      <button><span role="img" aria-label='go!'>🚀!</span></button>
+    </StyledNASA>
   );
 }
 
 const StyledNASA = styled.div`
-opacity: 0;
+opacity: 0.5;
 
-width: 60%;
-display: flex;
-justify-content: space-between;
+display: flex wrap;
+justify-content: center;
+text-align: center;
 
 button {
-  color: ${(props) => props.theme.tertiaryColor};
   &:hover{
-    transform: scale(1.3);
+    transform: scale(2.0);
     transition: transform 0.5s ease-in-out;
   }
   transition: transform 0.5s ease-in-out;
@@ -52,13 +56,6 @@ button {
 @media(max-width: 550px) {
   width: 100%auto;
 }
-
-&:hover {
-  color: ${(props) => props.theme.secondaryColor};
-  background-color: lightcoral;
-  transition: all 0.2s ease-in-out;
-}
-transition: all 0.2s ease-in-out;
 `
 
 export default App;
